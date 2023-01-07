@@ -44,6 +44,7 @@
             ['label' => 'Bills', 'url' => ['/bill/index']],
             ['label' => 'Companies', 'url' => ['/company/index']],
             ['label' => 'Contact', 'url' => ['/site/contact']],
+            ['label' => 'Address', 'url' => ['/address/address']],
             Yii::$app->user->isGuest
                 ? ['label' => 'Login', 'url' => ['/site/login']]
                 : '<li class="nav-item">'

@@ -17,7 +17,9 @@
         "php": ">=7.4.0",
         "yiisoft/yii2": "~2.0.45",
         "yiisoft/yii2-bootstrap5": "~2.0.2",
-        "yiisoft/yii2-symfonymailer": "~2.0.3"
+        "yiisoft/yii2-symfonymailer": "~2.0.3",
+        "wbraganca/yii2-dynamicform": "*",
+        "kartik-v/yii2-icons": "@dev"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",
@@ -48,6 +50,11 @@
         "post-create-project-cmd": [
             "yii\\composer\\Installer::postCreateProject",
             "yii\\composer\\Installer::postInstall"
+        ]
+    },
+    "autoload": {
+        "files": [
+            "functions.php"
         ]
     },
     "extra": {

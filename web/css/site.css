@@ -88,3 +88,16 @@ a.desc:after {
     font-size: 0.85rem;
     color: #aaa;
 }
+
+.toggle-on{
+    display: inline-block;
+    font-size: 30px;
+    color: green;
+  }
+
+.toggle-off{
+    display: inline-block;
+    font-size: 30px;
+    color: red;
+    transform: rotate(180deg);
+  }

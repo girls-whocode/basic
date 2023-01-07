@@ -1,30 +1,39 @@
 <?php
   use yii\helpers\Html;
+  use kartik\icons\Icon;
   use yii\widgets\LinkPager;
-
+  use yii\console\widgets\Table;
+  use yii\widgets\ActiveForm;
+  use wbraganca\dynamicform\DynamicFormWidget;
+ 
   $this->title = 'Bills';
   $this->params['breadcrumbs'][] = $this->title;
 
-  // cents: 0=never, 1=if needed, 2=always
-  function formatMoney($number, $cents = 2) { 
-    if (is_numeric($number)) {
-      if (!$number) {
-        $money = ($cents == 2 ? '0.00' : '0');
-      } else {
+  Icon::map($this);
+  $table = new Table();
 
-        if (floor($number) == $number) {
-          $money = number_format($number, ($cents == 2 ? 2 : 0));
-        } else {
-          $money = number_format(round($number, 2), ($cents == 0 ? 0 : 2));
-        }
-      }
-      return '$'.$money;
-    }
-  }
+  $js = '
+  jQuery(".dynamicform_wrapper").on("afterInsert", function(e, item) {
+      jQuery(".dynamicform_wrapper .panel-title-address").each(function(index) {
+          jQuery(this).html("Address: " + (index + 1))
+      });
+  });
+  
+  jQuery(".dynamicform_wrapper").on("afterDelete", function(e) {
+      jQuery(".dynamicform_wrapper .panel-title-address").each(function(index) {
+          jQuery(this).html("Address: " + (index + 1))
+      });
+  });
+  ';
+  
+  $this->registerJs($js);
 ?>
 
 <div class="site-bills">
   <h1><?= Html::encode($this->title) ?></h1>
+
+  <?php $form = ActiveForm::begin(['id' => 'dynamic-form']); ?>
+
   <table class="table">
     <thead>
       <tr>
@@ -46,17 +55,18 @@
       <tr>
         <th scope="row"><?= $bill['company_name'] ?></th>
         <td><a href="<?= $bill['company_website'] ?>" target="_blank"><?= $bill['company_credit_name'] ?></a></td>
-        <td><?= $bill['type_name'] ?></td>
-        <td><?= $bill['bill_autopay'] == '1' ? true : false ?></td>
+        <td class="text-center"><?= $bill['type_name'] == 'credit' ? Icon::show('credit-card', ['class'=>'fa-2x']) : Icon::show('file-invoice-dollar', ['class'=>'fa-2x']) ?></td>
+        <td class="text-center"><?= $bill['bill_autopay'] == '1' ? Icon::show('toggle-on', ['class'=>'fa-2x, toggle-on']) : Icon::show('toggle-on', ['class'=>'fa-2x, toggle-off']) ?></td>
         <td><?= formatMoney($bill['bill_credit']) ?></td>
         <td><?= formatMoney($bill['bill_balance']) ?></td>
         <td><?= formatMoney($bill['bill_payment']) ?></td>
         <td><?= $bill['bill_dueday'] ?></td>
-        <td><?= $bill['bill_rate'] ?></td>
+        <td><?= $bill['bill_rate'] ?>%</td>
         <td><?= $bill['bill_cpi'] == '1' ? true : false ?></td>
         <td><?= formatMoney($bill['bill_perid']) ?></td>
       </tr>
     <?php endforeach; ?>
     </tbody>
   </table>
+  <?php ActiveForm::end(); ?>
 </div>
